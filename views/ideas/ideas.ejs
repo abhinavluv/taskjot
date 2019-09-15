@@ -1,0 +1,18 @@
+<%- include('../layout/layout.ejs') %>
+
+<div class="container">
+    <h1>Task List</h1>
+    <% ideas.forEach((idea) => { %>
+        <div class="card card-body mb-2">
+            <h4><%= idea.title %></h4>
+            <p><%= idea.details %></p>
+            <a href="/ideas/edit/<%= idea.id %>" class="btn btn-dark w-25 mb-2">Edit</a>
+            <form action="/ideas/<%= idea.id %>?_method=DELETE" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="submit" class="btn btn-danger w-25" value="Delete">
+            </form>
+        </div>
+    <% }) %>
+</div>
+</body>
+</html>
