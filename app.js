@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 const app = express();
 
@@ -29,6 +31,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Method override middleware
 app.use(methodOverride('_method'));
+
+// Use express session middleware
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+// connect-flash middleware
+app.use(flash());
+
+// Global variables for messages
+app.use((request, response, next) => {
+    response.locals.success_msg = request.flash('success_msg');
+    response.locals.error_msg = request.flash('error_msg');
+    response.locals.error = request.flash('error');
+    next();
+});
 
 // index route
 app.get('/', (request, response) => {
@@ -125,7 +145,7 @@ app.post('/ideas', (request, response, next) => {
                 .save()
                 .then(idea => {
                     
-        
+            request.flash('success_msg', 'Task added successfully...');
             response.redirect('/ideas');
         })
                 
@@ -145,7 +165,7 @@ app.put('/ideas/:id', (request, response, next) => {
             idea.details = request.body.details;
             idea.save()
                 .then(updatedIdea => {
-                    
+                    request.flash('success_msg', 'Task Updated');
                     response.redirect('/ideas');
                 });
         })
@@ -157,7 +177,9 @@ app.delete('/ideas/:id', (request, response, next) => {
         _id: request.params.id
     })
     .then(() => {
-        response.redirect('back');
+        request.flash('success_msg', 'Task deleted...');
+        // console.log(request.flash());
+        response.redirect('/ideas');
     })
 });
 
