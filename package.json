@@ -18,7 +18,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.16.2",
     "method-override": "^3.0.0",
-    "mongoose": "^5.7.1",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.19.2",
     "noty": "^3.2.0-beta"
   }
